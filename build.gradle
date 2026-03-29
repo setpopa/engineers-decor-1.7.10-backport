@@ -1,0 +1,78 @@
+buildscript {
+    repositories {
+        maven {
+            name = 'GTNH Maven'
+            url = 'https://nexus.gtnewhorizons.com/repository/public/'
+        }
+        gradlePluginPortal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.gtnewhorizons:retrofuturagradle:${rfg_version}"
+    }
+}
+
+apply plugin: 'com.gtnewhorizons.retrofuturagradle'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
+
+group = project.meta_group
+version = project.version_engineersdecor
+base {
+    archivesName = "${project.meta_archives_base_name}-${project.version_minecraft}"
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
+    withSourcesJar()
+}
+
+minecraft {
+    mcVersion.set(project.version_minecraft)
+    mcpMappingChannel.set(project.version_mcp_channel)
+    mcpMappingVersion.set(project.version_mcp_mappings)
+    useForgeEmbeddedMappings.set(true)
+    username.set('Developer')
+    jvmLanguageVersion.set(JavaLanguageVersion.of(8))
+}
+
+repositories {
+    maven {
+        name = 'GTNH Maven'
+        url = 'https://nexus.gtnewhorizons.com/repository/public/'
+    }
+    maven {
+        name = 'CurseMaven'
+        url = 'https://cursemaven.com'
+    }
+    mavenCentral()
+}
+
+configurations {
+    runtimeOnlyNonPublishable
+    runtimeClasspath.extendsFrom(runtimeOnlyNonPublishable)
+    testRuntimeClasspath.extendsFrom(runtimeOnlyNonPublishable)
+}
+
+dependencies {
+    implementation(rfg.deobf("curse.maven:immersive-engineering-231951:2299019"))
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+tasks.processResources.configure {
+    def modVersion = project.version.toString()
+    inputs.property('modVersion', modVersion)
+    inputs.property('mcVersion', project.version_minecraft)
+
+    filesMatching('mcmod.info') {
+        expand([
+            modVersion: modVersion,
+            mcVersion : project.version_minecraft
+        ])
+    }
+}

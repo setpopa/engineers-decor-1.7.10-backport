@@ -1,0 +1,22 @@
+[
+  {
+    "modid": "engineersdecor",
+    "name": "Engineer's Decor",
+    "description": "Immersive Engineering decoration add-on backported to 1.7.10.",
+    "version": "${modVersion}",
+    "mcversion": "${mcVersion}",
+    "url": "https://github.com/stfwi/engineers-decor",
+    "updateUrl": "",
+    "authorList": [
+      "wile"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": [
+      "required-after:Forge@[10.13.4.1614,)",
+      "after:ImmersiveEngineering"
+    ]
+  }
+]
+
